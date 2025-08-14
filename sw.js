@@ -1,4 +1,4 @@
-const CACHE_NAME = "hst-cache-v1";
+const CACHE_NAME = "hst-cache-v2";
 const APP_SHELL = [
   "/My-Habits/",
   "/My-Habits/index.html",
@@ -9,14 +9,17 @@ const APP_SHELL = [
 ];
 
 self.addEventListener("install", (e) => {
+  self.skipWaiting();
   e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
 });
 
 self.addEventListener("activate", (e) => {
   e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null)))
-    )
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null)));
+      await self.clients.claim();
+    })()
   );
 });
 
@@ -35,7 +38,5 @@ self.addEventListener("fetch", (e) => {
     );
     return;
   }
-  e.respondWith(
-    fetch(request).catch(() => caches.match("/My-Habits/index.html"))
-  );
+  e.respondWith(fetch(request).catch(() => caches.match("/My-Habits/index.html")));
 });

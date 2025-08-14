@@ -29,23 +29,15 @@
 </head>
 <body>
   <div id="root"></div>
-
-  <!-- Always-visible install button + hint -->
   <button id="installPWA">Установить приложение</button>
   <div id="installHint">
     Если системная кнопка установки не появилась,<br>
     открой меню ⋮ → <b>Добавить на главный экран</b>.<br>
     (Убедись, что страница загружена по HTTPS и не в режиме приватного просмотра.)
   </div>
-
-  <!-- React UMD (global React/ReactDOM expected by app.js) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-
-  <!-- App -->
   <script defer src="/My-Habits/app.js"></script>
-
-  <!-- Service Worker registration -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -53,23 +45,18 @@
       });
     }
   </script>
-
-  <!-- Install logic: show button immediately; use prompt if available; otherwise show hint -->
   <script>
     let deferredPrompt = null;
     const btn = document.getElementById('installPWA');
     const hint = document.getElementById('installHint');
 
-    // Capture PWA install prompt when available
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      hint.style.display = 'none'; // we can hide hint when prompt is ready
+      hint.style.display = 'none';
     });
 
-    // Handle click: if prompt is ready — show it; otherwise show hint
     btn.addEventListener('click', async () => {
-      // If already installed, hide the button
       if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
         btn.style.display = 'none';
         return;
@@ -77,30 +64,23 @@
       if (deferredPrompt) {
         deferredPrompt.prompt();
         try {
-          const choice = await deferredPrompt.userChoice;
-          console.log('A2HS choice:', choice.outcome);
-        } catch (e) { console.log(e); }
+          await deferredPrompt.userChoice;
+        } catch (e) {}
         deferredPrompt = null;
       } else {
-        // No prompt available yet — show instructions
         hint.style.display = 'block';
         setTimeout(() => { hint.style.display = 'none'; }, 8000);
       }
     });
 
-    // When app gets installed
     window.addEventListener('appinstalled', () => {
       btn.style.display = 'none';
       hint.style.display = 'none';
     });
 
-    // Hide button if already in standalone
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
       btn.style.display = 'none';
     }
-
-    // Some browsers require a user gesture before they dispatch beforeinstallprompt,
-    // so we keep the button visible at all times as a fallback.
   </script>
 </body>
 </html>
