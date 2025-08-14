@@ -1,11 +1,11 @@
 const CACHE_NAME = "hst-cache-v1";
 const APP_SHELL = [
-  "/habit-tracker/",
-  "/habit-tracker/index.html",
-  "/habit-tracker/manifest.webmanifest",
-  "/habit-tracker/app.js",
-  "/habit-tracker/icons/icon-192.png",
-  "/habit-tracker/icons/icon-512.png"
+  "/My-Habits/",
+  "/My-Habits/index.html",
+  "/My-Habits/manifest.webmanifest",
+  "/My-Habits/app.js",
+  "/My-Habits/icons/icon-192.png",
+  "/My-Habits/icons/icon-512.png"
 ];
 
 self.addEventListener("install", (e) => {
@@ -36,6 +36,6 @@ self.addEventListener("fetch", (e) => {
     return;
   }
   e.respondWith(
-    fetch(request).catch(() => caches.match("/habit-tracker/index.html"))
+    fetch(request).catch(() => caches.match("/My-Habits/index.html"))
   );
 });

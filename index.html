@@ -1,20 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Habit & Supplements Tracker</title>
-  <link rel="manifest" href="/habit-tracker/manifest.webmanifest">
-  <link rel="icon" href="/habit-tracker/icons/icon-192.png">
   <meta name="theme-color" content="#0ea5e9">
+  <link rel="manifest" href="/My-Habits/manifest.webmanifest">
+  <link rel="icon" href="/My-Habits/icons/icon-192.png">
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="/habit-tracker/app.js"></script>
+
+  <!-- React UMD (the app.js expects global React/ReactDOM) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- App -->
+  <script defer src="/My-Habits/app.js"></script>
+
+  <!-- Service Worker registration with correct scope -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/habit-tracker/sw.js').catch(console.error);
+        navigator.serviceWorker.register('/My-Habits/sw.js').catch(console.error);
       });
     }
   </script>
