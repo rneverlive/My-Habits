@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habit & Supplements Tracker</title>
+  <link rel="manifest" href="/habit-tracker/manifest.webmanifest">
+  <link rel="icon" href="/habit-tracker/icons/icon-192.png">
+  <meta name="theme-color" content="#0ea5e9">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/habit-tracker/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/habit-tracker/sw.js').catch(console.error);
+      });
+    }
+  </script>
+</body>
+</html>
